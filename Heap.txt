@@ -1,0 +1,133 @@
+Heap1.java:
+----------
+
+package com.dsa;
+
+import java.util.ArrayList;
+
+public class Heap1 {
+	public static void main(String[] args) throws Exception {
+		Heap<Integer> heap = new Heap<>();
+		heap.display();
+		heap.insert(34); // o(logn)
+		heap.display();
+		heap.insert(23);
+		heap.insert(7);
+		heap.insert(56);
+		heap.insert(43);
+		heap.display();
+		heap.insert(20);
+		heap.display();
+		heap.remove();// o(logn)
+		heap.display();
+		System.out.println("Heap Sort:");
+		ArrayList sortedList = heap.heapSort(); // o(nlogn)
+		System.out.println(sortedList);
+	}
+}
+
+
+Heap.java:
+---------
+
+package com.dsa;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Heap<T extends Comparable<T>> {
+	List<T> list;
+
+	Heap() {
+		list = new ArrayList<>();
+	}
+
+	public void display() {
+		System.out.println(list);
+	}
+
+	// upheap property
+	public void insert(T value) {
+		list.add(value);
+		upheap(list.size() - 1);
+	}
+
+	private void upheap(int index) {
+		if (index == 0) {
+			System.out.println("list contains one element");
+			return;
+		}
+		int p = parent(index);
+		System.out.println("Parent:" + p);
+		if (list.get(index).compareTo(list.get(p)) < 0) {
+			swap(index, p);
+			upheap(p);
+		}
+	}
+
+	private void swap(int i, int j) {
+		T temp = list.get(i);
+		list.set(i, list.get(j));
+		list.set(j, temp);
+	}
+
+	private int parent(int i) {
+		return (i - 1) / 2;
+	}
+
+	// downheap property
+	public T remove() throws Exception {
+		if (list.isEmpty()) {
+			throw new Exception("Empty heap.Not able to remove:");
+		}
+		// always remove first element .here we are removing.storing in temp variable
+		T temp = list.get(0);
+		// here we are removing last element and storing in last variable. so we can
+		// store it in first index poistion
+		T last = list.remove(list.size() - 1);
+
+		if (!list.isEmpty()) {
+			// store last element in 0th index
+			list.set(0, last);
+			downheap(0);
+		}
+		return temp;
+	}
+
+	private void downheap(int index) {
+		int min = index;
+		int left = left(index);
+		int right = right(index);
+
+		if (left < list.size() && list.get(min).compareTo(list.get(left)) > 0) {
+			min = left;
+		}
+		if (right < list.size() && list.get(min).compareTo(list.get(right)) > 0) {
+			min = right;
+		}
+
+		if (min != index) {
+			swap(min, index);
+			downheap(min);
+		}
+	}
+
+	public int left(int i) {
+		return (2 * i + 1);
+	}
+
+	public int right(int i) {
+		return (2 * i + 2);
+	}
+
+	public ArrayList<T> heapSort() throws Exception {
+		ArrayList<T> sortedData = new ArrayList<>();
+
+		while (!list.isEmpty()) {
+			sortedData.add(remove());
+		}
+
+		return sortedData;
+	}
+
+}
