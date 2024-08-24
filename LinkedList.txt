@@ -1,0 +1,77 @@
+LinkedList:
+
+Q.Middle of the LinekedList:
+
+package com.ll;
+
+class ListNode {
+	int val;
+	ListNode next;
+
+	ListNode() {
+	}
+
+	ListNode(int val) {
+		this.val = val;
+	}
+
+	ListNode(int val, ListNode next) {
+		this.val = val;
+		this.next = next;
+	}
+}
+
+class Solution {
+	public ListNode middleNodeBruteForce(ListNode head) {
+		ListNode curr = head;
+		// if list is null is it contains only one element
+		while (curr == null || curr.next == null) {
+			return head;
+		}
+
+		int count = 0;
+		while (curr != null) {
+			count++;
+			curr = curr.next;
+		}
+		System.out.println("total nodes:" + count);
+		int mid = count / 2 + 1;
+		System.out.println("middle:" + mid);
+		curr = head;
+
+		while (curr != null) {
+			mid--;
+			if (mid == 0) {
+				break;
+			}
+			curr = curr.next;
+		}
+		return curr;
+	}
+
+	public ListNode middleNodeOptimal(ListNode head) {
+		ListNode slow = head, fast = head;
+
+		while (slow != null && fast != null && fast.next != null) {
+			slow = slow.next;
+			fast = fast.next.next;
+		}
+
+		return slow;
+	}
+}
+
+public class MiddleLinkedList {
+	public static void main(String[] args) {
+		ListNode head = new ListNode(10);
+		head.next = new ListNode(20);
+		head.next.next = new ListNode(30);
+		head.next.next.next = new ListNode(40);
+		head.next.next.next.next = new ListNode(50);
+		Solution s = new Solution();
+		ListNode ans = s.middleNodeBruteForce(head);
+		System.out.println(ans.val);
+		ListNode ans1 = s.middleNodeOptimal(head);
+		System.out.println(ans1.val);
+	}
+}
