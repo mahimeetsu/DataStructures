@@ -1,0 +1,113 @@
+package com.tree;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+class Node1 {
+	int data;
+	Node1 left;
+	Node1 right;
+
+	Node1(int data) {
+		this.data = data;
+		left = null;
+		right = null;
+	}
+}
+
+public class Inorder {
+	public static void main(String[] args) {
+		Node1 root = new Node1(1);
+		root.left = new Node1(2);
+		root.right = new Node1(3);
+		root.left.left = new Node1(4);		
+		root.left.right = new Node1(5);
+		root.right.left = new Node1(6);
+		root.right.right = new Node1(7);
+
+		List<Integer> inorderRs = inorderRecursion(root);
+		System.out.println(inorderRs);
+		List<Integer> inorderRs1 = inorderIterative(root);
+		System.out.println(inorderRs1);
+		List<Integer> inorderRs2 = inorderMorris(root);
+		System.out.println(inorderRs2);
+	}
+
+	private static List<Integer> inorderMorris(Node1 root) {
+		List<Integer> inorderList = new ArrayList<>();
+
+		Node1 curr = root;
+		// iterate till the current node is null
+		while (curr != null) {
+			// if there is no left child, then add the curr node to the list,then move to
+			// right
+			if (curr.left == null) {
+				inorderList.add(curr.data);
+				curr = curr.right;
+			} else {
+				Node1 prev = curr.left;
+				// if there is left child, then find right most child of left subtree(predecessor) 
+				while (prev.right != null && prev.right != curr) {
+					prev = prev.right;
+				}
+				//if the right most child(predecessor) right child is null, then make a link b/w predecessor and curr node and move to left
+				if(prev.right==null)
+				{
+					prev.right=curr;
+					curr=curr.left;
+				}
+				else
+				{
+					//if the right child of the right most node is not null(If the predecessor's right child
+                    // is already linked),then break the link by assigning null
+					prev.right=null;
+					//add curr node to inorder list and move to right
+					inorderList.add(curr.data);
+					curr=curr.right;					
+				}
+
+			}
+		}
+		return inorderList;
+	}
+
+	private static List<Integer> inorderIterative(Node1 root) {
+		List<Integer> list = new ArrayList<>();
+
+		Stack<Node1> stack = new Stack<>();
+
+		while (root != null || stack.size() > 0) {
+
+			while (root != null) {
+				stack.push(root);
+				root = root.left;
+			}
+
+			root = stack.pop();
+
+			list.add(root.data);
+
+			root = root.right;
+		}
+		return list;
+	}
+
+	/*
+	 * 1 2 3 4 5
+	 * 
+	 */
+	public static List<Integer> inorderRecursion(Node1 root) {
+		List<Integer> list = new ArrayList<>();
+		inorder(root, list);
+		return list;
+	}
+
+	public static void inorder(Node1 root, List<Integer> list) {
+		if (root == null)
+			return;
+		inorder(root.left, list);
+		list.add(root.data);
+		inorder(root.right, list);
+	}
+}
