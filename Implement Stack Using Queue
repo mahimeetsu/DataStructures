@@ -1,0 +1,116 @@
+Implement stack using queue:
+
+Using two queues:
+1.Enqueue x to q2
+2.dequeue elements from q1 and enqueue to q2,then remove from q1.
+3.swap names of q1 and q2.
+class MyStack {
+
+    // create two queues
+    Queue<Integer> q1;
+    Queue<Integer> q2;
+
+    public MyStack() {
+        q1 = new LinkedList<>();
+        q2 = new LinkedList<>();
+    }
+
+    public void push(int x) {
+        //insert (enqueue) x to q2
+        q2.add(x);
+        
+        //dequeue elements from q1 and enqueue into q2
+        while(!q1.isEmpty())
+        {
+            q2.add(q1.peek());
+            q1.remove();
+        }
+        //swap names of queues
+        Queue<Integer> temp=q1;
+        q1=q2;
+        q2=temp;
+    }
+
+    public int pop() {
+        //if no elements are there in q1,then return
+        return (int)q1.remove();
+    }
+
+    public int top() {
+        return (int)q1.peek();
+    }
+
+    public boolean empty() {
+        return q1.isEmpty();
+    }
+
+}
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
+•	Push operation: O(N), As all the elements need to be popped out from the Queue (q1) and push them back to Queue (q2).
+•	Pop operation: O(1), As we need to remove the front element from the Queue.
+Auxiliary Space: O(N), As we use two queues for the implementation of a Stack.
+
+
+Using single queue:
+Steps:
+Create one queue and push first element into queue.
+Push the 2nd element into queue, again push the 1st element into the stack and finally pop the first element from the stack.
+class MyStack {
+
+// create single queues
+    Queue<Integer> q1;
+
+    public MyStack() {
+        q1 = new LinkedList<>();
+    }
+
+    public void push(int x) {
+        //get the previous size of queue
+        int prevQueueSize=q1.size();
+        
+        //add current element to queue
+        q1.add(x);
+        
+        //pop previous element from queue and add it after the current element
+        //so it acts as a stack
+        for(int i=0;i<prevQueueSize;i++)
+        {
+            q1.add(q1.remove());
+        }
+    }
+
+    public int pop() {
+        // if no elements are there in q1,then return
+        return (int) q1.remove();
+    }
+
+    public int top() {
+        return (int) q1.peek();
+    }
+
+    public boolean empty() {
+        return q1.isEmpty();
+    }
+
+}
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
+Time Complexity:
+•	Push operation: O(N)
+•	Pop operation: O(1)
+Auxiliary Space: O(N) since 1 queue is used.
