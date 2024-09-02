@@ -1,0 +1,75 @@
+package com.stack;
+
+import java.util.Stack;
+
+public class MyStackImpl {
+
+	Stack<Integer> st = new Stack();
+	Integer minElement;
+
+	public void push(int x) {
+		if (st.isEmpty()) {
+			st.push(x);
+			minElement = x;
+		} else {
+			// we have two cases
+			// 1.if x is smaller then the minElement, then insert (2*x-minElement)
+			if (x < minElement) {
+				int val = (2 * x) - minElement;
+				st.push(val);
+				minElement = x;
+			}
+			// 2.if x is greater than or equals to the minElement, then insert it.
+			else {
+				st.push(x);
+			}
+		}
+		System.out.println("inserted number:" + x);
+	}
+
+	public void getMin() {
+		if (st.isEmpty()) {
+			System.out.println("Stack is empty:");
+
+		}
+		// minElement variable store the minimum element in the stack
+		else {
+			System.out.println("min element:" + minElement);
+		}
+	}
+
+	public void pop() {
+		if (st.isEmpty()) {
+			System.out.println("stack is empty:");
+			return;
+		}
+		// top element will be removed
+		Integer top = st.pop();
+		System.out.println("top most element removed");
+		// if the removed element(top) is smaller than the minElement,then we need to
+		// update the minElement
+		if (top < minElement) {
+			System.out.println(minElement);
+			minElement = (2 * minElement) - top;
+		} else {
+			System.out.println(top);
+		}
+	}
+
+	public void peek() {
+		if (st.isEmpty()) {
+			System.out.println("stack is empty:");
+			return;
+		} else {
+			System.out.println("Top most element:");
+			Integer top = st.peek();
+			//If top < minEle means minEle stores
+	        // value of t.
+			if (top < minElement) {
+				System.out.println(minElement);
+			} else {
+				System.out.println(top);
+			}
+		}
+	}
+}
